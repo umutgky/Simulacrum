@@ -1,7 +1,20 @@
 #include "App.h"
 
 
-wxIMPLEMENT_APP(App);
+wxIMPLEMENT_APP_NO_MAIN(App);
+
+// Initialise SDL before WX-Widgets and GTK3
+
+int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+{
+	// Initialise SDL and Error Check
+	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+		std::cerr << "SDL Initialisation Error\n\n";
+	}
+
+	return wxEntry();
+}
+
 
 App::App()
 {
