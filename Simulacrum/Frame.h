@@ -18,6 +18,8 @@ private:
 	SDL_Renderer* renderer = nullptr;
 	std::unique_ptr<SimManager> simManager;
 
+	wxSimplebook* sideBook = nullptr;
+
 	void SwitchSimState(wxCommandEvent& evt);
 };
 

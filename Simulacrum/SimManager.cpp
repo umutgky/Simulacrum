@@ -1,8 +1,10 @@
 #include "SimManager.h"
 
-SimManager::SimManager(SDL_Renderer* rdr)
+SimManager::SimManager(SDL_Renderer* rdr, int width, int height)
 {
 	this->renderer = rdr;
+	this->width = width;
+	this->height = height;
 }
 
 SimManager::~SimManager()

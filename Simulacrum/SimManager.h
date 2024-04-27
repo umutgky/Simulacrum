@@ -6,13 +6,16 @@ class SimManager : public wxTimer
 {
 public:
 
-	SimManager(SDL_Renderer* rdr);
+	SimManager(SDL_Renderer* rdr, int width = 0, int height = 0);
 	~SimManager();
 
 	void SwitchSim(State val);
 
 	virtual void Notify();
 private:
+
+	int width;
+	int height;
 
 	State simState = None;
 
