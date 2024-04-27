@@ -7,12 +7,16 @@ Frame::Frame() : wxFrame(nullptr, wxID_ANY, "Simulacrum")
 	// Create the Menu bar
 	wxMenuBar* menuBar = new wxMenuBar();
 	wxMenu* simsMenu = new wxMenu();
+	wxMenu* pauseMenu = new wxMenu();
 	simsMenu->AppendRadioItem(None, _("None"));
 	simsMenu->AppendRadioItem(GameOfLife, _("Game Of Life"));
 	simsMenu->AppendRadioItem(FlowField, _("Flow Field"));
 	menuBar->Append(simsMenu, "Simulations");
+	menuBar->Append(pauseMenu, "Pause");
+	
 	SetMenuBar(menuBar);
-	menuBar->Bind(wxEVT_MENU, &Frame::SwitchSimState, this);
+	simsMenu->Bind(wxEVT_MENU, &Frame::SwitchSimState, this);
+	pauseMenu->Bind(wxEVT_MENU_OPEN, &Frame::PauseSim, this);
 
 	// Create Rendering Context
 	wxPanel* renderPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(600, 600));
@@ -35,19 +39,12 @@ Frame::Frame() : wxFrame(nullptr, wxID_ANY, "Simulacrum")
 	wxPanel* sidePanelGoF = new wxPanel(sideBook, wxID_ANY, wxDefaultPosition);
 	sidePanelGoF->SetBackgroundColour(wxColor(0, 255, 255));
 
-	wxPanel* sideElement1 = new wxPanel(sidePanelGoF, wxID_ANY, wxDefaultPosition);
-	sideElement1->SetBackgroundColour(wxColor(255, 255, 0));
+	wxButton* btnResetGoF = new wxButton(sidePanelGoF, wxID_ANY, _("Reset"), wxDefaultPosition, wxSize(200,40));
 
-	wxButton* btn = new wxButton(sideElement1, wxID_ANY, _("Reset"), wxDefaultPosition, wxSize(200,40));
+	wxBoxSizer* sideSizerGoF = new wxBoxSizer(wxVERTICAL);
+	sideSizerGoF->Add(btnResetGoF);
 
-	wxPanel* sideElement2 = new wxPanel(sidePanelGoF, wxID_ANY, wxDefaultPosition);
-	sideElement2->SetBackgroundColour(wxColor(255, 0, 0));
-
-	wxBoxSizer* sideSizer = new wxBoxSizer(wxVERTICAL);
-	sideSizer->Add(sideElement1,1, wxEXPAND);
-	sideSizer->Add(sideElement2,1, wxEXPAND);
-
-	sidePanelGoF->SetSizer(sideSizer);
+	sidePanelGoF->SetSizer(sideSizerGoF);
 	sideBook->AddPage(sidePanelGoF, "GoF", false);
 
 	// Create Side Panel - Flow Field
@@ -79,4 +76,9 @@ void Frame::SwitchSimState(wxCommandEvent& evt)
 	int id = evt.GetId();
 	sideBook->SetSelection(id - 10000);
 	simManager->SwitchSim(static_cast<State>(id));
+}
+
+void Frame::PauseSim(wxMenuEvent& evt)
+{
+	simManager->TogglePause();
 }

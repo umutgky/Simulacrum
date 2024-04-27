@@ -10,12 +10,14 @@ public:
 	~SimManager();
 
 	void SwitchSim(State val);
-
+	void TogglePause();
 	virtual void Notify();
 private:
 
 	int width;
 	int height;
+
+	bool isPaused = false;
 
 	State simState = None;
 
@@ -24,6 +26,8 @@ private:
 	void MasterInit();
 	void MasterUpdate();
 	void MasterRender();
+
+	
 
 	int value = 1;
 

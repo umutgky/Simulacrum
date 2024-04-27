@@ -51,24 +51,28 @@ void SimManager::MasterInit()
 
 void SimManager::MasterUpdate()
 {
-	switch (simState)
+	if (!isPaused)
 	{
-	case None:
-		break;
-	case GameOfLife: // Gradient blue
-		if (value < 255)
+		switch (simState)
 		{
-			value++;
+		case None:
+			break;
+		case GameOfLife: // Gradient blue
+			if (value < 255)
+			{
+				value++;
+			}
+			else
+			{
+				value = 0;
+			}
+		case FlowField:
+			break;
+		default:
+			break;
 		}
-		else
-		{
-			value = 0;
-		}
-	case FlowField:
-		break;
-	default:
-		break;
 	}
+	
 }
 
 void SimManager::MasterRender()
@@ -94,4 +98,9 @@ void SimManager::MasterRender()
 	default:
 		break;
 	}
+}
+
+void SimManager::TogglePause()
+{
+	isPaused = !isPaused;
 }

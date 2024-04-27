@@ -21,5 +21,6 @@ private:
 	wxSimplebook* sideBook = nullptr;
 
 	void SwitchSimState(wxCommandEvent& evt);
+	void PauseSim(wxMenuEvent& evt);
 };
 
