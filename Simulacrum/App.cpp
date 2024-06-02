@@ -28,6 +28,9 @@ App::~App()
 
 bool App::OnInit()
 {
+	int width = 800;
+	int height = 600;
+
 	frame = new Frame();
 	frame->SetClientSize(wxSize(800, 600));
 	frame->Center();

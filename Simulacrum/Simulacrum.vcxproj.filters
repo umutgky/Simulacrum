@@ -27,6 +27,9 @@
     <ClInclude Include="State.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Cell.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp">

@@ -22,5 +22,6 @@ private:
 
 	void SwitchSimState(wxCommandEvent& evt);
 	void PauseSim(wxMenuEvent& evt);
+	void ResetSim(wxMenuEvent& evt);
 };
 

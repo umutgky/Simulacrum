@@ -8,24 +8,29 @@ Frame::Frame() : wxFrame(nullptr, wxID_ANY, "Simulacrum")
 	wxMenuBar* menuBar = new wxMenuBar();
 	wxMenu* simsMenu = new wxMenu();
 	wxMenu* pauseMenu = new wxMenu();
+	wxMenu* resetMenu = new wxMenu();
+
 	simsMenu->AppendRadioItem(None, _("None"));
 	simsMenu->AppendRadioItem(GameOfLife, _("Game Of Life"));
 	simsMenu->AppendRadioItem(FlowField, _("Flow Field"));
+
 	menuBar->Append(simsMenu, "Simulations");
 	menuBar->Append(pauseMenu, "Pause");
+	menuBar->Append(resetMenu, "Reset");
 	
 	SetMenuBar(menuBar);
 	simsMenu->Bind(wxEVT_MENU, &Frame::SwitchSimState, this);
 	pauseMenu->Bind(wxEVT_MENU_OPEN, &Frame::PauseSim, this);
+	resetMenu->Bind(wxEVT_MENU_OPEN, &Frame::ResetSim, this);
 
 	// Create Rendering Context
 	wxPanel* renderPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(600, 600));
 	render_window = SDL_CreateWindowFrom((void*)renderPanel->GetHandle());
 	if (render_window != NULL) {
-		renderer = SDL_CreateRenderer(render_window, NULL, 0);
+		renderer = SDL_CreateRenderer(render_window, NULL, SDL_RENDERER_ACCELERATED);
 	}
 	// Create Sim Manager
-	simManager = std::make_unique<SimManager>(renderer);
+	simManager = std::make_unique<SimManager>(renderer, 600, 600);
 	
 	// Create Side Panel
 	sideBook = new wxSimplebook(this, wxID_ANY, wxDefaultPosition, wxSize(200,600));
@@ -39,12 +44,11 @@ Frame::Frame() : wxFrame(nullptr, wxID_ANY, "Simulacrum")
 	wxPanel* sidePanelGoF = new wxPanel(sideBook, wxID_ANY, wxDefaultPosition);
 	sidePanelGoF->SetBackgroundColour(wxColor(0, 255, 255));
 
-	wxButton* btnResetGoF = new wxButton(sidePanelGoF, wxID_ANY, _("Reset"), wxDefaultPosition, wxSize(200,40));
+	//wxButton* btnResetGoF = new wxButton(sidePanelGoF, wxID_ANY, _("Reset"), wxDefaultPosition, wxSize(200,40));
+	//wxBoxSizer* sideSizerGoF = new wxBoxSizer(wxVERTICAL);
+	//sideSizerGoF->Add(btnResetGoF);
+	//sidePanelGoF->SetSizer(sideSizerGoF);
 
-	wxBoxSizer* sideSizerGoF = new wxBoxSizer(wxVERTICAL);
-	sideSizerGoF->Add(btnResetGoF);
-
-	sidePanelGoF->SetSizer(sideSizerGoF);
 	sideBook->AddPage(sidePanelGoF, "GoF", false);
 
 	// Create Side Panel - Flow Field
@@ -81,4 +85,9 @@ void Frame::SwitchSimState(wxCommandEvent& evt)
 void Frame::PauseSim(wxMenuEvent& evt)
 {
 	simManager->TogglePause();
+}
+
+void Frame::ResetSim(wxMenuEvent& evt)
+{
+	simManager->MasterInit();
 }

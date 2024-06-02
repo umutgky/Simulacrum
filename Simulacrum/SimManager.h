@@ -2,6 +2,8 @@
 #include "wx/wx.h"
 #include "SDL3/SDL.h"
 #include "State.h"
+#include <vector>
+#include "Cell.h"
 class SimManager : public wxTimer
 {
 public:
@@ -12,10 +14,12 @@ public:
 	void SwitchSim(State val);
 	void TogglePause();
 	virtual void Notify();
+	void MasterInit();
+	
 private:
 
-	int width;
-	int height;
+	const int width;
+	const int height;
 
 	bool isPaused = false;
 
@@ -23,14 +27,16 @@ private:
 
 	SDL_Renderer* renderer;
 
-	void MasterInit();
+	
 	void MasterUpdate();
 	void MasterRender();
 
-	
-
-	int value = 1;
-
 	bool isInitialised = false;
+
+	// GoL Variables
+	const int GoLScale = 20;
+	const int GoLGridWidth;
+	const int GoLGridHeight;
+	std::vector<std::vector<Cell>> GoLGrid;
 };
 
